@@ -1,0 +1,11 @@
+[project]
+name = "drokatu2026"
+version = "0.1.0"
+description = "CoDrone EDU flight scripts"
+requires-python = ">=3.14"
+dependencies = [
+    "codrone-edu==2.10",
+]
+
+[tool.uv]
+package = false
