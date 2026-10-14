@@ -36,8 +36,8 @@ CoDrone EDUをPythonで操作するチーム開発用プロジェクトです。
    必要なPythonが見つからない場合はuvがダウンロードします。初回はインターネット接続が必要です。
 
 4. VSCodeにMicrosoftの **Python** と **Pylance** 拡張機能を入れます。
+   F5で実行するため、Microsoftの **Python Debugger** 拡張機能も有効になっていることを確認します（通常はPython拡張機能と一緒にインストールされます）。
    `Ctrl+Shift+P` → `Python: Select Interpreter` で `.venv\Scripts\python.exe` を選びます。
-   以下の直接実行コマンドは、この選択にかかわらず `.venv` のPythonを使用します。
 
 5. 機体を動かさず、ライブラリのインポートを確認します。
 
@@ -49,42 +49,41 @@ CoDrone EDUをPythonで操作するチーム開発用プロジェクトです。
 
 ## コードの実行
 
-すべてのコマンドは、`pyproject.toml` があるプロジェクトフォルダーで実行します。
-仮想環境の有効化やPowerShellスクリプトの読み込みは不要です。
+VSCodeでプロジェクトフォルダーを開き、初期セットアップで選択した
+`.venv\Scripts\python.exe` を使用します。
 
 ### test.pyを実行する
 
 1. コントローラーをデータ通信対応USBケーブルでPCにつなぎます。
 2. ドローンとコントローラーの電源を入れ、ペアリングします。
 3. 同じコントローラーを使用するブラウザーや別のプログラムの接続を終了します。
-4. 飛行スペースを確保し、次を実行します。
-
-   ```powershell
-   .\.venv\Scripts\python.exe .\test.py
-   ```
+4. VSCodeで `test.py` を開き、保存します。
+5. 飛行スペースを確保し、**F5** を押します。
+   または、上部の **「実行」→「デバッグの開始」** を選びます。
+   左側の **「実行とデバッグ」** タブから **「実行とデバッグ」** ボタンを押しても実行できます。
+6. 初回に選択画面が表示されたら **「Python Debugger」→「Python File（Pythonファイル）」** を選びます。
+   現在開いているPythonファイルを実行する構成を選択してください。
 
 `test.py` は離陸 → 1秒ホバリング → 着陸 → 接続終了を行います。
-このコマンドは開発時にCOM6のCoDrone EDUへ接続し、正常終了した方法です。
 各PCのUSB接続・ポート使用状況・権限によって接続できない場合は、下記を確認してください。
+F5はデバッグ実行のため、ブレークポイントがあるとその行で処理が停止します。
+飛行テスト前に不要なブレークポイントを解除してください。
 
-### 別のファイルを指定する
+### 別のファイルを実行する
 
-次のパスを、実行したいPythonファイルのパスに置き換えます。
+実行したい `.py` ファイルをVSCodeで開き、保存してから **F5**、
+または **「実行」→「デバッグの開始」** を選びます。
+現在開いているPythonファイルを実行する構成を使用してください。
 
-```powershell
-.\.venv\Scripts\python.exe "実行するファイルのパス.py"
-```
-
-相対パスは現在のターミナルのフォルダーを基準にします。絶対パスも指定できます。
-スペースを含むパスはダブルクォートで囲みます。
-ファイルに渡す引数は、ファイルパスの後に続けて指定できます。
+実行操作の詳細は [VSCode公式ドキュメント](https://code.visualstudio.com/docs/python/debugging) を参照してください。
 
 ## 実行できない場合
 
 - `py` が見つからない：Pythonをインストールし、VSCodeとターミナルを開き直します。
 - `No module named uv`：`py -m pip install uv` を実行します。
 - `.venv\Scripts\python.exe` が見つからない：現在のフォルダーを確認し、`py -m uv sync --locked` を実行します。
-- `No module named codrone_edu`：`py -m uv sync --locked` を実行し、上記の `.venv` のPythonでインポートを再確認します。
+- `No module named codrone_edu`：`py -m uv sync --locked` を実行し、`Python: Select Interpreter` で `.venv\Scripts\python.exe` を選び直します。
+- F5でPythonを実行できない：PythonとPython Debugger拡張機能が有効か確認し、対象の `.py` ファイルを開いて実行します。
 - コントローラーが検出されない：USBケーブルがデータ通信対応か、電源と接続状態を確認します。
 - `Could not connect to CoDrone EDU controller` / アクセス拒否：ブラウザーなどが同じポートを使用していないか確認し、USBを接続し直します。組織のPCではUSB・シリアル通信の制限も管理者に確認してください。
 
