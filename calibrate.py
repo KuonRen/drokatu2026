@@ -50,7 +50,10 @@ class SetTrim:
     def measure_flights(self, drone, phase, log_dir):
         """同一トリムで10回。位置の回帰直線の傾きを各飛行の流れとする。"""
         results = []
-        for trial in range(1, 11):
+        attempts = {}
+        while len(results) < 10:
+            trial = len(results) + 1
+            attempts[trial] = attempts.get(trial, 0) + 1
             print(f'\n{phase}: {trial}/10 回目 / roll={self.roll_trim}, pitch={self.pitch_trim}')
             command = input('同じ開始位置・向きに戻し、飛行範囲を確認してEnter（qで中止）: ')
             if command.strip().lower() == 'q':
@@ -73,6 +76,7 @@ class SetTrim:
             status = 'incomplete'
             reason = ''
             airborne = False
+            retry_measurement = False
             try:
                 drone.set_trim(self.roll_trim, self.pitch_trim)
                 time.sleep(1)
@@ -113,8 +117,13 @@ class SetTrim:
                         'fresh_position': position[0] > last_position,
                     })
                     if any(packet[0] <= 0 or not 0 <= received - packet[0] <= 1
-                           for packet in (position, flow, distance, state)):
-                        raise TimeoutError('センサーデータが1秒以上更新されていません')
+                        for packet in (position, flow, distance, state)):
+                        retry_measurement = True
+                        stale = [name for name, packet in (
+                            ('position', position), ('flow', flow),
+                            ('range', distance), ('state', state),
+                        ) if packet[0] <= 0 or not 0 <= received - packet[0] <= 1]
+                        raise TimeoutError(f'センサーデータが未受信または1秒以上更新されていません: {stale}')
                     if state[2] is not ModeFlight.Flight:
                         raise RuntimeError(f'通常の飛行状態ではありません: {state[2]}')
                     if state[6] < 20:
@@ -122,7 +131,8 @@ class SetTrim:
                         print('B\n「そんな……！ 回路が焼き切れたの！？ それとも拒絶しているというの、せいじ君が……！」')
                         raise RuntimeError('飛行中にバッテリーが20%未満になりました')
                     if not 0.3 <= distance[2] / 1000 <= 1.5:
-                        raise RuntimeError('測定高度が0.3～1.5mの範囲外です')
+                        retry_measurement = True
+                        raise RuntimeError(f'測定高度が0.3～1.5mの範囲外です: {distance[2] / 1000:.3f}m')
                     if math.hypot(position[1], position[2]) > 0.75:
                         raise RuntimeError('離陸地点からの水平ずれが0.75mを超えました')
                     last_position = max(last_position, position[0])
@@ -155,7 +165,8 @@ class SetTrim:
             except BaseException as error:
                 status = 'failed'
                 reason = f'{type(error).__name__}: {error}'
-                raise
+                if not retry_measurement or attempts[trial] >= 3:
+                    raise
             finally:
                 try:
                     if airborne:
@@ -176,7 +187,8 @@ class SetTrim:
                     raise
                 finally:
                     # 中断や着陸失敗でも、それまでの測定を残す。
-                    with (log_dir / f'{phase}_{trial:02d}.csv').open(
+                    suffix = '' if attempts[trial] == 1 else f'_retry{attempts[trial] - 1}'
+                    with (log_dir / f'{phase}_{trial:02d}{suffix}.csv').open(
                         'x', newline='', encoding='utf-8-sig',
                     ) as logfile:
                         fields = list(samples[0]) if samples else ['phase', 'trial']
@@ -184,6 +196,10 @@ class SetTrim:
                         writer.writeheader()
                         for row in samples or [{'phase': phase, 'trial': trial}]:
                             writer.writerow(dict(row, status=status, reason=reason))
+            if status == 'failed':
+                print(f'測定を中断して着陸しました: {reason}')
+                print(f'完了済みの{len(results)}回は保持しています。この回は集計しません。')
+                print('床面・機体・センサーと飛行範囲を確認してください。次のEnterで再試行、qで中止します。')
         return results
 
     def summarize_measurements(self, results):
