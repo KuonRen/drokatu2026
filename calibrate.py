@@ -243,7 +243,7 @@ class SetTrim:
         log_dir.mkdir(parents=True, exist_ok=False)
         report = {'original_trim': original, 'status': 'started'}
         saved = False
-        print('補正前10回 → トリムを最大2ずつ補正 → 補正後10回を実施します')
+        print('補正前10回 → トリムを最大2ずつ補正 → 変更がある場合のみ補正後10回を実施します')
         print(f'測定ログ: {log_dir}')
         try:
             before = self.summarize_measurements(self.measure_flights(drone, 'before', log_dir))
@@ -251,6 +251,10 @@ class SetTrim:
             self.roll_trim, self.pitch_trim = self.calculate_trim(before)
             report['candidate_trim'] = self.load_trim_config()
             print(f'候補トリム: roll={self.roll_trim}, pitch={self.pitch_trim}')
+            if self.load_trim_config() == original:
+                report['status'] = 'unchanged'
+                print('トリム値に変更がないため、補正後の測定を省略して終了します。設定は変更しません')
+                return
             after = self.summarize_measurements(self.measure_flights(drone, 'after', log_dir))
             report['after'] = after
             # 符号付き平均の相殺だけで「改善」としない。
@@ -264,10 +268,7 @@ class SetTrim:
                 improved = improved and new <= max(0.02, old)
                 if self.load_trim_config()[index] != original[index]:
                     improved = improved and new < old
-            if self.load_trim_config() == original:
-                report['status'] = 'unchanged'
-                print('明確な補正方向がないため、設定を変更しません')
-            elif improved:
+            if improved:
                 self.save_trim_config()
                 saved = True
                 report['status'] = 'saved'
