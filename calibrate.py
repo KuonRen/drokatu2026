@@ -55,11 +55,13 @@ class SetTrim:
             trial = len(results) + 1
             attempts[trial] = attempts.get(trial, 0) + 1
             print(f'\n{phase}: {trial}/10 回目 / roll={self.roll_trim}, pitch={self.pitch_trim}')
-            command = input('同じ開始位置・向きに戻し、飛行範囲を確認してEnter（qで中止）: ')
-            if command.strip().lower() == 'q':
-                raise InterruptedError('ユーザーが測定を中止しました')
-            if command.strip():
-                raise ValueError('開始操作はEnter、またはqを入力してください')
+            while True:
+                command = input('同じ開始位置・向きに戻し、飛行範囲を確認してEnter（qで中止）: ')
+                if command.strip().lower() == 'q':
+                    raise InterruptedError('ユーザーが測定を中止しました')
+                if not command.strip():
+                    break
+                print('開始する場合は何も入力せずEnter、中止する場合はqを入力してください。')
 
             state = list(drone.get_state_data(delay=0.1))
             age = time.time() - drone.timeStartProgram - state[0]
