@@ -10,6 +10,7 @@ def move_test():
     time.sleep(1)
     # 離陸する
     drone.takeoff()
+    print("スーパー宮本せいじ号発信！！！")
     # poll_down = -0.55  # カードドロップの時に下げる値
     # move_card = 0.8
     drone.set_controller_LED(255, 0, 0, 100)
@@ -31,7 +32,7 @@ def move_test():
     # ドロップコイン
     drone.move_distance(0, -1.35, 0, 1)
     drone.hover(1)
-    # せいじ君がL字-1に帰宅
+    # せいじ君がL字に帰宅
     drone.move_distance(0, 1.35, 0, 1)
     drone.hover(1)
 
