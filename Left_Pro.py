@@ -10,7 +10,7 @@ def move_test():
     time.sleep(1)
     # 離陸する
     drone.takeoff()
-    print("スーパー宮本せいじ号発信！！！")
+    print("スーパー宮本せいじ号発進！！！")
     # poll_down = -0.55  # カードドロップの時に下げる値
     # move_card = 0.8
     drone.set_controller_LED(255, 0, 0, 100)
