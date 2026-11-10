@@ -13,80 +13,19 @@ def move_test():
     print("スーパー宮本せいじ号発進！！！")
     # poll_down = -0.55  # カードドロップの時に下げる値
     # move_card = 0.8
-    drone.set_controller_LED(0, 0, 255, 100)
-    drone.set_drone_LED(0, 0, 255, 100)
-    drone.hover(1)
-    # 開始地点：中央ラインより縦0.3m, 横1.5m地点を中心とする
-
-    # L字-1
-    # 開始ポジション
-    drone.move_distance(0.5, -0.03, 0, 0.75)  # ...distance(前後/m, 左右/m, 上下/m, 距離m/s)
-    drone.hover(0.5)
-    # 少し下がってボールに風あてる
-    drone.move_distance(0, 0, -0.4, 0.5)
-    drone.hover(1)
-    drone.move_distance(-0.1, 0, 0, 0.5)
-    drone.hover(1)
-    # ドロップコイン横までせいじ君が進む
-    drone.move_distance(0.65, 0, 0, 1)
+    drone.set_controller_LED(255, 0, 0, 100)
+    drone.set_drone_LED(255, 0, 0, 100)
     drone.hover(1)
 
-    # # ドロップコイン
-    # drone.move_distance(0, 0, 0.3, 1)
-    # drone.hover(1)
-    # drone.move_distance(0, -1, 0, 1)
-    # drone.hover(2)
-    # # せいじ君がL字に帰宅
-    # drone.move_distance(0, 0.9, 0, 1)
-    # drone.hover(3)
-    # drone.move_distance(0, 0, -0.3, 1)
-    # drone.hover(2)
+    # 実際に飛行するコード
 
-    # L字の角まで進む
-    drone.move_distance(0.7, 0, 0, 0.5)
-    drone.hover(1)
-    # 右にあるであろうボールに風を当てるため
-    drone.move_distance(0, 0.1, 0, 1)
-    drone.hover(1)
-    # L字横移動
-    drone.move_distance(0, -0.962, 0, 0.7)
-    drone.hover(1)
-    # 最後の穴入れチャレンジ
-    drone.move_distance(0, 0.25, 0, 1)
-    drone.hover(1)
-    drone.move_distance(0.1, 0, 0, 1)
-    drone.hover(1)
-    # 押し込み & 縦位置戻し
-    drone.move_distance(-0.1, 0, 0, 1)
-    drone.hover(1)
-
-    # マット初期位置650 高さは後日設定
-    drone.move_distance(0, 0.4, 0, 1)
-    drone.hover(1)
-    drone.move_distance(1.5, 0, 0, 1)
-    drone.hover(1)
-    # drone.move_distance(0, -0.75, 0.2, 1)
-    # drone.hover(1)
-
-    # # ボーナスタワー落とし
-    # drone.move_distance(0, -0.4, -0.2, 1)
-    # drone.hover(1)
-    # drone.move_distance(0.4, 0, 0.2, 1)
-    # drone.hover(1)
-    # drone.move_distance(0, 0.4, 0, 1)
-    # drone.hover(1)
-
-    # ブラインド
-    drone.move_distance(0, 0, 1.5, 1)
-    drone.hover(1)
-    drone.move_distance(1, 0, 0, 1)
-    drone.hover(1)
-
-    # drone.move_distance(0, 0, 0, 1)
-    # drone.hover(1)
-    # ランディング
-    drone.land()
-    drone.close()
+    # Ⅰ．ドリブルチャレンジ（10 / 20 / 40）
+    drone.move_distance(0.7, -0.1, 0, 1)        # 前へ70cm、右へ10cm（↕70～80cm）
+    drone.hover(1)                              # 1sホバリング
+    drone.move_distance(0, 0, -0.4, 1)          # 40cm下降（↕30cm）
+    drone.hover(2)                              # 1sホバリング
+    drone.move_distance(0.7, 0, 0, 1)           # 前に70cm（↕30cm）
+    drone.hover(1)                              # 1sホバリング
 
 # 実行する関数
 move_test()
