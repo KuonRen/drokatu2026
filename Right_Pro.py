@@ -19,35 +19,85 @@ def move_test():
 
     # 実際に飛行するコード
 
-    # Ⅰ．ドリブルチャレンジ（点数配分：10 / 20 / 40）
-    drone.move_distance(0.7, -0.1, 0, 1)        # 開始ポジション：前へ70cm、右へ10cm（↕70～80cm）
-    drone.hover(1)                              # 1sホバリング
-    drone.move_distance(0, 0, -0.4, 1)          # 風の当たる高さへ：40cm下降（↕30cm）
-    drone.hover(2)                              # 1sホバリング
-    drone.move_distance(0.7, 0, 0, 1)           # 第一回前進：前に70cm（↕30cm）
-    drone.hover(1)                              # 1sホバリング
-    drone.move_distance(0.7, 0.1, 0, 1)         # 第二回前進：前に70cm、左へ10cm（↕30cm）
-    drone.hover(1)                              # 1sホバリング
-    drone.move_distance(0, -0.9, 0, 1)          # 右に押し込む：右に90cm（↕30cm）
-    drone.hover(1)                              # 1sホバリング
-    drone.move_distance(0, -0.1, 0, 1)          # 左に動かすために右へ：右に10cm（↕30cm）
-    drone.hover(1)                              # 1sホバリング
-    drone.move_distance(0, 0.4, 0, 1)           # 左上へ押し込む：左に40cm（↕30cm）
-    drone.hover(1)                              # 1sホバリング
-    drone.move_distance(0, 0, 0.3, 1)           # 上へ上げる：上30cm（↕60cm）
-    drone.hover(1)                              # 1sホバリング
-    drone.move_distance(0, 1, 0, 1)             # 左へ移動：左に100cm（↕60cm）
-    drone.hover(1)                              # 1sホバリング
-
-    # Ⅱ．半円通過
-    drone.move_distance(2.5, 0, 0, 1)           # 半円通過：前に110cm（↕60cm）
-    drone.hover(1)                              # 1sホバリング
-
-    # Ⅲ．ブラインド～ゴール
-    drone.move_distance(0, 1.4, 0, 1)           # 上へ上昇：上に140cm（↕200cm）
-    drone.hover(1)                              # 1sホバリング
-    drone.move_distance(0., 1.4, 0, 1)           # 上へ上昇：上に140cm（↕200cm）
+    # Ⅰ．ドリブルチャレンジ
+    print("[Ⅰ-01] ボール手前へ：前70cm、右10cm", flush=True)
+    drone.move_distance(0.7, -0.1, 0, 1)
+    print("[Ⅰ-02] ホバリング：1秒", flush=True)
     drone.hover(1)
 
-# 実行する関数
-move_test()
+    print("[Ⅰ-03] ドリブルの高さへ：下40cm", flush=True)
+    drone.move_distance(0, 0, -0.4, 1)
+    print("[Ⅰ-04] ホバリング：2秒", flush=True)
+    drone.hover(2)
+
+    print("[Ⅰ-05] 直線区間：前70cm", flush=True)
+    drone.move_distance(0.7, 0, 0, 1)
+    print("[Ⅰ-06] ホバリング：1秒", flush=True)
+    drone.hover(1)
+
+    print("[Ⅰ-07] 曲がり角へ：前70cm、左10cm", flush=True)
+    drone.move_distance(0.7, 0.1, 0, 1)
+    print("[Ⅰ-08] ホバリング：1秒", flush=True)
+    drone.hover(1)
+
+    print("[Ⅰ-09] ボールを横へ押す：右90cm", flush=True)
+    drone.move_distance(0, -0.9, 0, 1)
+    print("[Ⅰ-10] ホバリング：1秒", flush=True)
+    drone.hover(1)
+
+    print("[Ⅰ-11] 折り返し位置へ：右10cm", flush=True)
+    drone.move_distance(0, -0.1, 0, 1)
+    print("[Ⅰ-12] ホバリング：1秒", flush=True)
+    drone.hover(1)
+
+    print("[Ⅰ-13] ボールを押し戻す：左40cm", flush=True)
+    drone.move_distance(0, 0.4, 0, 1)
+    print("[Ⅰ-14] ホバリング：1秒", flush=True)
+    drone.hover(1)
+
+    print("[Ⅰ-15] ゲート通過の高さへ：上30cm", flush=True)
+    drone.move_distance(0, 0, 0.3, 1)
+    print("[Ⅰ-16] ホバリング：1秒", flush=True)
+    drone.hover(1)
+
+    print("[Ⅰ-17] ゲート通過ラインへ：左100cm", flush=True)
+    drone.move_distance(0, 1, 0, 1)
+    print("[Ⅰ-18] ホバリング：1秒", flush=True)
+    drone.hover(1)
+
+    # Ⅱ．半円通過
+    print("[Ⅱ-01] 半円ゲートを通過：前187.5cm", flush=True)
+    drone.move_distance(1.875, 0, 0, 0.5)
+    print("[Ⅱ-02] ホバリング：1秒", flush=True)
+    drone.hover(1)
+
+    # Ⅲ．ブラインド～ゴール
+    print("[Ⅲ-01] 暗幕を越える高さへ：上140cm", flush=True)
+    drone.move_distance(0, 0, 1.4, 0.5)
+    print("[Ⅲ-02] ホバリング：1秒", flush=True)
+    drone.hover(1)
+
+    print("[Ⅲ-03] ゾーンボックスの真上へ：前305cm、左5cm", flush=True)
+    drone.move_distance(3.05, 0.05, 0, 0.7)
+    print("[Ⅲ-04] ホバリング：1秒", flush=True)
+    drone.hover(1)
+
+    print("[Ⅲ-05] 着陸前の高さへ：下140cm", flush=True)
+    drone.move_distance(0, 0, -1.4, 0.4)
+    print("[Ⅲ-06] ホバリング：1秒", flush=True)
+    drone.hover(1)
+
+    print("[Ⅲ-07] 着陸指令", flush=True)
+    drone.land()
+    print("[Ⅲ-08] 接続を閉じる", flush=True)
+    drone.close()
+    print("[END] 飛行プログラム終了", flush=True)
+
+
+# 接続準備から着陸まで、例外が出た箇所をターミナルに残す。
+try:
+    print("[START] 接続準備・離陸処理を開始", flush=True)
+    move_test()
+except Exception:
+    print("[ERROR] 処理中断。最後の操作ログと下の例外を確認してください。", flush=True)
+    raise
