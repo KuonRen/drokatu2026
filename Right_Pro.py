@@ -40,13 +40,15 @@ def move_test():
     print("[Ⅰ-08] ホバリング：1秒", flush=True)
     drone.hover(1)
 
-    print("[Ⅰ-09] ボールを横へ押す：右90cm", flush=True)
-    drone.move_distance(0, -0.9, 0, 1)
+    # 横パイプの端は、右900mm＋パイプ長762mmと仮定。
+    # 右1000mmから右1500mmまでを練習時の上限目標にする。
+    print("[Ⅰ-09] ボールを横へ押す：右45cm", flush=True)
+    drone.move_distance(0, -0.45, 0, 1)
     print("[Ⅰ-10] ホバリング：1秒", flush=True)
     drone.hover(1)
 
-    print("[Ⅰ-11] 折り返し位置へ：右10cm", flush=True)
-    drone.move_distance(0, -0.1, 0, 1)
+    print("[Ⅰ-11] 折り返し位置へ：右5cm", flush=True)
+    drone.move_distance(0, -0.05, 0, 1)
     print("[Ⅰ-12] ホバリング：1秒", flush=True)
     drone.hover(1)
 
@@ -60,16 +62,22 @@ def move_test():
     print("[Ⅰ-16] ホバリング：1秒", flush=True)
     drone.hover(1)
 
-    print("[Ⅰ-17] ゲート通過ラインへ：左100cm", flush=True)
-    drone.move_distance(0, 1, 0, 1)
+    print("[Ⅰ-17] ゲート通過ラインへ：左50cm", flush=True)
+    drone.move_distance(0, 0.5, 0, 1)
     print("[Ⅰ-18] ホバリング：1秒", flush=True)
     drone.hover(1)
+
+    print("[DIAG Ⅰ→Ⅱ] 機体のエラー状態を照会", flush=True)
+    print("[DIAG Ⅰ→Ⅱ] SDK応答:", repr(drone.get_error_data()), flush=True)
 
     # Ⅱ．半円通過
     print("[Ⅱ-01] 半円ゲートを通過：前187.5cm", flush=True)
     drone.move_distance(1.875, 0, 0, 0.5)
     print("[Ⅱ-02] ホバリング：1秒", flush=True)
     drone.hover(1)
+
+    print("[DIAG Ⅱ→Ⅲ] 機体のエラー状態を照会", flush=True)
+    print("[DIAG Ⅱ→Ⅲ] SDK応答:", repr(drone.get_error_data()), flush=True)
 
     # Ⅲ．ブラインド～ゴール
     print("[Ⅲ-01] 暗幕を越える高さへ：上140cm", flush=True)
